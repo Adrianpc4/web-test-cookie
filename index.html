@@ -4,12 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servidor de Prueba</title>
+    <title>Verificación de Cookies de Terceros</title>
 </head>
 
 <body>
-    <h1>Servidor de Prueba (localhost:3000)</h1>
-    <p>Este es un iframe de prueba.</p>
+    <h1>Validación de Cookies de Terceros</h1>
+    <button id="checkCookies">Verificar Cookies de Terceros</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('checkCookies').addEventListener('click', () => {
+            checkThirdPartyCookies().then((enabled) => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.textContent = enabled ? 'Las cookies de terceros están habilitadas.' : 'Las cookies de terceros NO están habilitadas.';
+            });
+        });
+
+        function checkThirdPartyCookies() {
+            return new Promise((resolve) => {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = 'https://chimerical-biscochitos-bdc922.netlify.app'; // Aquí apuntamos a otro puerto en localhost
+                document.body.appendChild(iframe);
+
+                iframe.onload = () => {
+                    const iframeWindow = iframe.contentWindow;
+                    iframeWindow.document.cookie = 'testcookie=1; SameSite=None; Secure'; // Intenta establecer una cookie
+
+                    const cookiesEnabled = iframeWindow.document.cookie.includes('testcookie');
+                    resolve(cookiesEnabled);
+
+                    // Limpieza
+                    iframeWindow.document.cookie = 'testcookie=; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+                    document.body.removeChild(iframe);
+                };
+
+                iframe.onerror = () => {
+                    resolve(false);
+                    document.body.removeChild(iframe);
+                };
+            });
+        }
+    </script>
 </body>
 
 </html>
