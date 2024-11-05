@@ -19,10 +19,10 @@
             console.log(document.cookie);  // Imprimir cookies para debug
             if (document.cookie.includes("thirdPartyCookie=test")) {
                 // Enviar un mensaje al dominio principal si la cookie fue configurada correctamente
-                window.parent.postMessage({ cookieStatus: "valid" }, "https://adrianpc4.github.io"); // "https://chimerical-biscochitos-bdc922.netlify.app"
+                window.parent.postMessage({ cookieStatus: "valid" }, "https://chimerical-biscochitos-bdc922.netlify.app/"); // "https://chimerical-biscochitos-bdc922.netlify.app"
             } else {
                 // Si no se configuró la cookie, enviar un mensaje indicando que está bloqueada
-                window.parent.postMessage({ cookieStatus: "invalid" }, "https://adrianpc4.github.io"); // https://adrianpc4.github.io/web-test-cookie/
+                window.parent.postMessage({ cookieStatus: "invalid" }, "https://chimerical-biscochitos-bdc922.netlify.app/"); // https://adrianpc4.github.io/web-test-cookie/
             }
         }
 
