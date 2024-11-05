@@ -10,9 +10,9 @@
 
     <script>
         // Intentar establecer una cookie de terceros
-        document.cookie = "thirdPartyCookie=test; path=/; SameSite=None; Secure";
-
         document.cookie = "nombre=valor; path=/;";
+
+        document.cookie = "thirdPartyCookie=test; SameSite=None; Secure; path=/";
 
         // Verificar si la cookie fue establecida correctamente
         function checkCookie() {
