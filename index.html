@@ -12,6 +12,8 @@
         // Intentar establecer una cookie de terceros
         document.cookie = "thirdPartyCookie=test; path=/; domain=https://adrianpc4.github.io; SameSite=None; Secure";
 
+        document.cookie = "nombre=valor; path=/;";
+
         // Verificar si la cookie fue establecida correctamente
         function checkCookie() {
             console.log(document.cookie);  // Imprimir cookies para debug
