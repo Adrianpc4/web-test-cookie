@@ -1,51 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificación de Cookies de Terceros</title>
+    <title>Iframe de Cookies de Terceros</title>
 </head>
-
 <body>
-    <h1>Validación de Cookies de Terceros</h1>
-    <button id="checkCookies">Verificar Cookies de Terceros</button>
-    <div id="result"></div>
+    <h1>Iframe de Cookies de Terceros</h1>
 
     <script>
-        document.getElementById('checkCookies').addEventListener('click', () => {
-            checkThirdPartyCookies().then((enabled) => {
-                const resultDiv = document.getElementById('result');
-                resultDiv.textContent = enabled ? 'Las cookies de terceros están habilitadas.' : 'Las cookies de terceros NO están habilitadas.';
-            });
-        });
+        // Intentar establecer una cookie de terceros
+        document.cookie = "thirdPartyCookie=test; path=/; domain=mi-dominio-secundario.com; SameSite=None; Secure";
 
-        function checkThirdPartyCookies() {
-            return new Promise((resolve) => {
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = 'https://chimerical-biscochitos-bdc922.netlify.app'; // Aquí apuntamos a otro puerto en localhost
-                document.body.appendChild(iframe);
-
-                iframe.onload = () => {
-                    const iframeWindow = iframe.contentWindow;
-                    iframeWindow.document.cookie = 'testcookie=1; SameSite=None; Secure'; // Intenta establecer una cookie
-
-                    const cookiesEnabled = iframeWindow.document.cookie.includes('testcookie');
-                    resolve(cookiesEnabled);
-
-                    // Limpieza
-                    iframeWindow.document.cookie = 'testcookie=; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
-                    document.body.removeChild(iframe);
-                };
-
-                iframe.onerror = () => {
-                    resolve(false);
-                    document.body.removeChild(iframe);
-                };
-            });
+        // Verificar si la cookie fue configurada
+        if (document.cookie.includes("thirdPartyCookie=test")) {
+            // Enviar un mensaje al dominio principal si la cookie fue configurada correctamente
+            window.parent.postMessage({ cookieStatus: "valid" }, "https://mi-dominio-principal.com");
+        } else {
+            // Si no se configuró la cookie, enviar un mensaje indicando que está bloqueada
+            window.parent.postMessage({ cookieStatus: "invalid" }, "https://mi-dominio-principal.com");
         }
     </script>
 </body>
-
 </html>
