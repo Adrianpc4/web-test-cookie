@@ -9,28 +9,21 @@
     <h1>Iframe de Cookies de Terceros</h1>
 
     <script>
-        // Intentar establecer una cookie de terceros
-        document.cookie = "nombre=valor; path=/;";
+    document.cookie = `s=1; secure=true; samesite=none; path=/;`
 
-        document.cookie = "thirdPartyCookie=test; SameSite=None; Secure; path=/";
+    ;(function () {
+      if (!window.parent) return
+      const hasCookie = /s=1/.test(document.cookie)
 
-        // Verificar si la cookie fue establecida correctamente
-        function checkCookie() {
-            console.log(document.cookie);  // Imprimir cookies para debug
-            if (document.cookie.includes("thirdPartyCookie=test")) {
-                console.log('la encontro');
-                // Enviar un mensaje al dominio principal si la cookie fue configurada correctamente
-                window.parent.postMessage({ cookieStatus: "valid" }, "https://chimerical-biscochitos-bdc922.netlify.app"); // "https://chimerical-biscochitos-bdc922.netlify.app"
-            } else {
-                console.log('no la encontro');
-                // Si no se configuró la cookie, enviar un mensaje indicando que está bloqueada
-                window.parent.postMessage({ cookieStatus: "invalid" }, "https://chimerical-biscochitos-bdc922.netlify.app"); // https://adrianpc4.github.io/web-test-cookie/
-            }
-        }
+      let hasStorageAccess = true
+      if (document.hasStorageAccess &&
+          typeof document.hasStorageAccess === "function") {
+        hasStorageAccess = document.hasStorageAccess()
+      }
 
-        // Llamar a la función para verificar si la cookie fue establecida
-        checkCookie();
-        
-    </script>
+      const msg = hasCookie && hasStorageAccess ? "supported" : "unsupported"
+      window.parent.postMessage(msg, "*")
+    })()
+  </script>
 </body>
 </html>
