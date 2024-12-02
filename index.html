@@ -9,21 +9,29 @@
     <h1>Iframe de Cookies de Terceros</h1>
 
     <script>
-        document.cookie = `s=1; secure=true; samesite=none; path=/;`
+        // Establece la cookie de manera correcta
+        document.cookie = `s=1; secure=true; samesite=none; path=/;`;
     
         (function () {
-          if (!window.parent) return
-          const hasCookie = /s=1/.test(document.cookie)
+          // Verifica que el objeto window.parent esté disponible
+          if (!window.parent) return;
     
-          let hasStorageAccess = true
-          if (document.hasStorageAccess &&
-              typeof document.hasStorageAccess === "function") {
-            hasStorageAccess = document.hasStorageAccess()
+          // Verifica si la cookie 's=1' existe en el documento
+          const hasCookie = /s=1/.test(document.cookie);
+    
+          // Asume que tiene acceso a almacenamiento
+          let hasStorageAccess = true;
+    
+          // Verifica si el método 'hasStorageAccess' está disponible y si es una función
+          if (document.hasStorageAccess && typeof document.hasStorageAccess === "function") {
+            // Llama al método solo si está disponible
+            hasStorageAccess = document.hasStorageAccess();
           }
     
-          const msg = hasCookie && hasStorageAccess ? "supported" : "unsupported"
-          window.parent.postMessage(msg, "*")
-        })()
+          // Envia un mensaje al parent con el estado de la compatibilidad
+          const msg = hasCookie && hasStorageAccess ? "supported" : "unsupported";
+          window.parent.postMessage(msg, "*");
+        })();
   </script>
 </body>
 </html>
