@@ -9,21 +9,21 @@
     <h1>Iframe de Cookies de Terceros</h1>
 
     <script>
-    document.cookie = `s=1; secure=true; samesite=none; path=/;`
-
-    ;(function () {
-      if (!window.parent) return
-      const hasCookie = /s=1/.test(document.cookie)
-
-      let hasStorageAccess = true
-      if (document.hasStorageAccess &&
-          typeof document.hasStorageAccess === "function") {
-        hasStorageAccess = document.hasStorageAccess()
-      }
-
-      const msg = hasCookie && hasStorageAccess ? "supported" : "unsupported"
-      window.parent.postMessage(msg, "*")
-    })()
+        document.cookie = `s=1; secure=true; samesite=none; path=/;`
+    
+        (function () {
+          if (!window.parent) return
+          const hasCookie = /s=1/.test(document.cookie)
+    
+          let hasStorageAccess = true
+          if (document.hasStorageAccess &&
+              typeof document.hasStorageAccess === "function") {
+            hasStorageAccess = document.hasStorageAccess()
+          }
+    
+          const msg = hasCookie && hasStorageAccess ? "supported" : "unsupported"
+          window.parent.postMessage(msg, "*")
+        })()
   </script>
 </body>
 </html>
